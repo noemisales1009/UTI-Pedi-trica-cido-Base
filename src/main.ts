@@ -248,19 +248,42 @@ function calcAlc(): void {
     setRes('alc', 'neutral', 'Parâmetros não confirmam alcalose metabólica', 'pH < 7,45 ou HCO₃⁻ < 28 — revisar gasometria.')
     return
   }
-  const sev = ph > 7.55 ? 'Grave (pH > 7,55) — tratar ativamente!'
-    : ph > 7.50 ? 'Moderada (pH 7,51–7,55)'
-    : 'Leve (pH 7,45–7,50)'
-  let cond = ''
+  const pco2Exp = Math.min(0.6 * (hco3 - 24) + 40, 55)
+  const teto = pco2Exp >= 55
+  const sev = ph > 7.55 ? 'Grave (pH > 7,55)' : ph > 7.50 ? 'Moderada (pH 7,51–7,55)' : 'Leve (pH 7,45–7,50)'
+  const sevBadge = ph > 7.55
+    ? '<span class="badge b-red">Grave — tratar ativamente!</span>'
+    : ph > 7.50 ? '<span class="badge b-amber">Moderada</span>'
+    : '<span class="badge b-green">Leve</span>'
+  let bd = `${sevBadge} &nbsp;PaCO₂ esperada (Merck): <strong>≈ ${pco2Exp.toFixed(1)} mmHg</strong>`
+  if (teto) bd += ' <span class="badge b-amber">teto 55 mmHg</span>'
+  bd += '<br><br>'
   if (!isNaN(clur)) {
-    if (clur < 20)
-      cond = '<strong>Cloro responsivo</strong> (Cl⁻ur &lt; 20 mEq/L)<br>Repor volume (SF 0,9%) · repor cloreto · corrigir K⁺ · suspender causa precipitante'
-    else if (clur >= 25)
-      cond = '<strong>Cloro resistente</strong> (Cl⁻ur ≥ 25 mEq/L)<br>Suspender diuréticos · acetazolamida · espironolactona se hiperaldosteronismo · corrigir K⁺'
-    else
-      cond = '<strong>Zona cinza</strong> (Cl⁻ur 20–25 mEq/L)<br>Avaliar contexto clínico e resposta terapêutica'
+    if (clur < 20) {
+      bd += '<strong>Cloro responsivo</strong> (Cl⁻ur &lt; 20 mEq/L)<br>'
+      bd += '• SF 0,9% — repor volume e cloreto<br>'
+      bd += '• Repor K⁺ (hipocalemia perpetua a alcalose)<br>'
+      bd += '• Suspender causa precipitante (vômitos, SNG, diuréticos)<br>'
+      bd += '• Meta Cl⁻ur: &gt; 40 mEq/L'
+    } else if (clur >= 25) {
+      bd += '<strong>Cloro resistente</strong> (Cl⁻ur ≥ 25 mEq/L)<br>'
+      bd += '• Acetazolamida 5–10 mg/kg/dose IV/VO 6–8h (máx 500 mg)<br>'
+      bd += '• Espironolactona 1–3 mg/kg/dia se hiperaldosteronismo<br>'
+      bd += '• Corrigir K⁺ e Mg²⁺ antes de tratar a alcalose<br>'
+      bd += '• HCl 0,1 N se pH &gt; 7,60 refratário (via CVC)'
+    } else {
+      bd += '<strong>Zona cinza</strong> (Cl⁻ur 20–25 mEq/L)<br>Avaliar contexto clínico e resposta terapêutica'
+    }
+  } else {
+    bd += 'Informe o Cl⁻ urinário para orientar a conduta.'
   }
-  setRes('alc', 'info', `Alcalose metabólica — ${sev}`, cond || 'Informe o Cl⁻ urinário para orientar a conduta.')
+  bd += '<br><br><strong>Complicações:</strong> '
+  bd += '<span class="badge b-amber">Hipocalemia</span> '
+  bd += '<span class="badge b-amber">↓Ca²⁺ ionizado</span> '
+  bd += '<span class="badge b-red">Arritmias</span> '
+  bd += '<span class="badge b-red">Tetania/convulsões</span> '
+  bd += '<span class="badge b-gray">↓ entrega O₂ (Bohr)</span>'
+  setRes('alc', 'info', `Alcalose metabólica — ${sev}`, bd)
 }
 
 function calcBic(): void {

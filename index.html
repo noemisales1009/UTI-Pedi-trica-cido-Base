@@ -89,17 +89,60 @@
         <div class="ref-cell"><div class="ref-val">-2 a +2</div><div class="ref-lbl">BE mEq/L</div></div>
         <div class="ref-cell"><div class="ref-val">135–145</div><div class="ref-lbl">Na⁺ mEq/L</div></div>
         <div class="ref-cell"><div class="ref-val">≥ 94%</div><div class="ref-lbl">SatO₂</div></div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">H⁺ por pH — validação da amostra</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>pH</th><th>[H⁺] nmol/L</th><th>Interpretação</th></tr>
+          <tr><td>&lt; 7,00</td><td>&gt; 100</td><td><span class="badge b-red">Fatal</span></td></tr>
+          <tr><td>7,10</td><td>79</td><td><span class="badge b-red">Acidose grave</span></td></tr>
+          <tr><td>7,20</td><td>63</td><td><span class="badge b-amber">Acidose moderada</span></td></tr>
+          <tr><td>7,30</td><td>50</td><td><span class="badge b-amber">Acidose leve</span></td></tr>
+          <tr><td>7,35–7,45</td><td>35–45</td><td><span class="badge b-green">Normal</span></td></tr>
+          <tr><td>7,50</td><td>32</td><td><span class="badge b-blue">Alcalose leve</span></td></tr>
+          <tr><td>7,60</td><td>25</td><td><span class="badge b-red">Alcalose grave</span></td></tr>
+        </table></div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:6px">Regra rápida: cada 0,1 de pH ≈ 10 nmol/L de H⁺ (válido em pH 7,2–7,6)</div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">fluxo diagnóstico — 6 passos</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.9">
+          <div><span class="badge b-blue" style="min-width:20px;text-align:center">1</span>&nbsp; <strong>pH:</strong> acidemia (&lt;7,35) · alcalemia (&gt;7,45) · normal?</div>
+          <div><span class="badge b-blue" style="min-width:20px;text-align:center">2</span>&nbsp; <strong>Distúrbio primário:</strong> PaCO₂ ↑ → resp · HCO₃⁻ ↓ → metab</div>
+          <div><span class="badge b-blue" style="min-width:20px;text-align:center">3</span>&nbsp; <strong>Compensação adequada?</strong> Usar fórmulas abaixo</div>
+          <div><span class="badge b-blue" style="min-width:20px;text-align:center">4</span>&nbsp; <strong>Ânion gap corrigido</strong> (albumina) — ref. 8–12</div>
+          <div><span class="badge b-blue" style="min-width:20px;text-align:center">5</span>&nbsp; <strong>Se AG↑:</strong> razão ΔAG/ΔHCO₃⁻ (distúrbio misto?)</div>
+          <div><span class="badge b-blue" style="min-width:20px;text-align:center">6</span>&nbsp; <strong>Validar H-H:</strong> pH calc = 6,1 + log(HCO₃/0,03×PaCO₂)</div>
+        </div>
       </div>
     </div>
     <div>
       <div id="res-gas" class="result"><div id="res-gas-hd" class="result-head"></div><div id="res-gas-bd" class="result-body"></div></div>
       <div class="card" style="margin-top:12px">
-        <div class="section">regras de compensação</div>
+        <div class="section">fórmulas de compensação</div>
         <div style="font-size:12px;line-height:1.85;color:var(--text-secondary)">
-          <div style="margin-bottom:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Ac. resp. aguda</span><br>HCO₃ = 24 + (0,1–0,2) × (PaCO₂ − 40)</div>
-          <div style="margin-bottom:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Ac. resp. crônica</span><br>HCO₃ = 24 + 0,35 × (PaCO₂ − 40)</div>
-          <div style="margin-bottom:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Alc. resp. aguda</span><br>HCO₃ = 24 − 0,2 × (40 − PaCO₂)</div>
-          <div style="padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Ac. metabólica (Winter)</span><br>PaCO₂ = (1,3–1,5) × HCO₃ + 8 ± 2</div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Acidose respiratória</div>
+          <div style="margin-bottom:8px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Aguda (≤48h)</span><br>HCO₃⁻ = 24 + 0,1 × (PaCO₂ − 40) <span style="opacity:.6">+1 mEq/10mmHg</span></div>
+          <div style="margin-bottom:8px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Crônica (&gt;3–5d)</span><br>HCO₃⁻ = 24 + 0,35 × (PaCO₂ − 40) <span style="opacity:.6">+3,5 mEq/10mmHg</span></div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Alcalose respiratória</div>
+          <div style="margin-bottom:8px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Aguda</span><br>HCO₃⁻ = 24 − 0,2 × (40 − PaCO₂) <span style="opacity:.6">−2 mEq/10mmHg</span></div>
+          <div style="margin-bottom:8px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Crônica</span><br>HCO₃⁻ = 24 − 0,5 × (40 − PaCO₂) <span style="opacity:.6">−5 mEq/10mmHg</span></div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Acidose metabólica — fórmula ATS</div>
+          <div style="margin-bottom:8px;padding:8px;background:#EEF1FF;border-radius:var(--radius-sm);border:1px solid #C7D2FE"><span style="font-weight:600;color:var(--blue)">Winter (ATS)</span><br>PaCO₂ = 1,5 × HCO₃⁻ + 8 <strong>± 2</strong></div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Alcalose metabólica — fórmula Merck</div>
+          <div style="padding:8px;background:#EEF1FF;border-radius:var(--radius-sm);border:1px solid #C7D2FE"><span style="font-weight:600;color:var(--blue)">Merck</span><br>PaCO₂ = 0,6 × (HCO₃⁻ − 24) + 40 <em style="opacity:.7">teto 55 mmHg</em></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">exemplo — distúrbio misto real</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.85">
+          <div style="padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm);margin-bottom:8px"><strong>Dados:</strong> pH 7,20 · PaCO₂ 28 mmHg · HCO₃⁻ 10 mEq/L<br>Na⁺ 140 · Cl⁻ 102 · Alb 2,5 g/dL</div>
+          <div>→ pH &lt; 7,35 → <strong>acidemia</strong></div>
+          <div>→ HCO₃⁻ &lt; 22 → distúrbio primário <strong>metabólico</strong></div>
+          <div>→ AG = 140−102−10 = <strong>28</strong> | AGc = 28+2,5×(4−2,5) = <strong>31,75</strong> (↑)</div>
+          <div>→ Winter: PaCO₂ esp. = 1,5×10+8 = <strong>23 ± 2 = 21–25 mmHg</strong></div>
+          <div>→ Observado 28 &gt; 25 → <span class="badge b-red">acidose resp. concomitante</span></div>
+          <div>→ ΔAG = 19,75 · ΔHCO₃ = 14 · Razão = <strong>1,41</strong> (normal)</div>
+          <div style="padding:8px;background:#FEF2F2;border-radius:var(--radius-sm);margin-top:6px;border:1px solid #FECACA"><strong>Diagnóstico:</strong> Acidose metab. com AG↑ + acidose resp.<br><span style="opacity:.7">Ex: cetoacidose + pneumonia</span></div>
         </div>
       </div>
     </div>
@@ -114,10 +157,11 @@
         <div class="section" style="color:var(--danger-text)">acidose respiratória</div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px">↑ PaCO₂ · ↓ pH · ↑ HCO₃⁻ (compensação)</div>
         <div class="step open" onclick="tog(this)"><div class="step-hd"><div class="step-num">1</div><div class="step-label">Fisiopatologia</div><div class="step-chevron">▼</div></div><div class="step-body">Hipoventilação → retenção CO₂ → CO₂+H₂O → H₂CO₃ → H⁺+HCO₃⁻ → ↑H⁺ → ↓pH</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">2</div><div class="step-label">Causas</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Centrais:</strong> opioides, sedação, TCE, AVC<br><strong>Pulmonares:</strong> DPOC, asma grave, pneumonia, SDRA<br><strong>Neuromusculares:</strong> Guillain-Barré, miopatias<br><strong>VM:</strong> volume corrente baixo, FR baixa</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">3</div><div class="step-label">Compensação renal</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Aguda (≤48h):</strong> ↑ 1 mEq/L HCO₃ / 10 mmHg PaCO₂<br><strong>Crônica (&gt;3–5d):</strong> ↑ 3–4 mEq/L HCO₃ / 10 mmHg PaCO₂</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">4</div><div class="step-label">Manifestações</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Neurológicas:</strong> sonolência, cefaleia, confusão, asterix<br><strong>CV:</strong> vasodilatação, hipotensão, arritmias<br><strong>Metabólicas:</strong> hipercalemia, acidemia</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">5</div><div class="step-label">Tratamento</div><div class="step-chevron">▼</div></div><div class="step-body">Tratar causa · Melhorar ventilação · O₂ · VNI se indicado · Ajustes ventilatórios (↑ VC e/ou FR)<br><br>Bicarbonato: <span class="badge b-red">Não indicado</span></div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">2</div><div class="step-label">Causas</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Central:</strong> opioides, sedativos, TCE grave, AVC tronco, hipotireoidismo<br><strong>Pulmonar:</strong> DPOC exacerbado, asma grave, pneumonia extensa, SDRA, pneumotórax<br><strong>Neuromuscular:</strong> Guillain-Barré, miastenia grave, ELA, botulismo, lesão medular alta<br><strong>Via aérea:</strong> corpo estranho, laringoespasmo, anafilaxia<br><strong>VM:</strong> VC baixo, FR inadequada, espaço morto aumentado</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">3</div><div class="step-label">Compensação renal</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Mecanismo:</strong> rim retém HCO₃⁻ e excreta NH₄⁺<br><br><div class="tbl-wrap"><table class="tbl"><tr><th>Fase</th><th>Tempo</th><th>Fórmula</th><th>Δ/10mmHg</th></tr><tr><td>Aguda</td><td>min–horas</td><td>HCO₃⁻ = 24 + 0,1×(PaCO₂−40)</td><td>+1 mEq/L</td></tr><tr><td>Crônica</td><td>&gt;3–5d</td><td>HCO₃⁻ = 24 + 0,35×(PaCO₂−40)</td><td>+3,5 mEq/L</td></tr></table></div><br>Máximo de compensação: HCO₃⁻ ≈ 45 mEq/L</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">4</div><div class="step-label">Manifestações</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Neurológico:</strong> cefaleia, sonolência, asterixe, confusão, narcose por CO₂ (PaCO₂ &gt; 80)<br><strong>Cardiovascular:</strong> vasodilatação periférica, hipotensão, taquicardia → depressão miocárdica<br><strong>Respiratório:</strong> dispneia, uso de musculatura acessória<br><strong>Metabólico:</strong> hipercalemia (H⁺ intra↑, K⁺ sai), ↓ Ca²⁺ ionizado<br><strong>Cutâneo:</strong> rubor, diaforese (vasodilatação por CO₂)</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">5</div><div class="step-label">Tratamento — passo a passo</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>1.</strong> Via aérea — IOT se Glasgow ≤ 8 ou acidose grave<br><strong>2.</strong> O₂ suplementar — cuidado DPOC (hipóxia como drive)<br><strong>3.</strong> VNI (CPAP/BiPAP) se sem contraindicação e cooperativo<br><strong>4.</strong> Tratar causa — broncodilatadores, naloxona, antibióticos<br><strong>5.</strong> VM invasiva: VC 6–8 mL/kg, FR adequada; ↓ PaCO₂ gradualmente<br><strong>6.</strong> DPOC crônico: não corrigir para normal (alcalose pós-hipercápnica)<br><br>Bicarbonato: <span class="badge b-red">Contraindicado</span> — gera CO₂, piora hipercapnia</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">6</div><div class="step-label">Gravidade clínica</div><div class="step-chevron">▼</div></div><div class="step-body"><div class="tbl-wrap"><table class="tbl"><tr><th>Grau</th><th>pH</th><th>PaCO₂</th><th>Critério clínico</th></tr><tr><td><span class="badge b-blue">Leve</span></td><td>7,25–7,35</td><td>45–60</td><td>Dispneia, consciente, tolerando posição</td></tr><tr><td><span class="badge b-amber">Moderada</span></td><td>7,15–7,25</td><td>60–80</td><td>Confusão, asterixe, taquicardia, cianose</td></tr><tr><td><span class="badge b-red">Grave</span></td><td>&lt; 7,15</td><td>&gt; 80</td><td>Narcose/coma, colapso hemodinâmico, apneia</td></tr></table></div></div></div>
       </div>
     </div>
     <div>
@@ -125,10 +169,11 @@
         <div class="section" style="color:var(--info-text)">alcalose respiratória</div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px">↓ PaCO₂ · ↑ pH · ↓ HCO₃⁻ (compensação)</div>
         <div class="step open" onclick="tog(this)"><div class="step-hd"><div class="step-num">1</div><div class="step-label">Fisiopatologia</div><div class="step-chevron">▼</div></div><div class="step-body">Hiperventilação → ↓CO₂ → ↓H₂CO₃ → ↓H⁺ → ↑pH (alcalose)</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">2</div><div class="step-label">Causas</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Hipoxemia:</strong> pneumonia, TEP, edema pulmonar<br><strong>Sistêmicas:</strong> sepse, febre, dor, anemia<br><strong>Neurológicas:</strong> ansiedade, dor, TCE, convulsões<br><strong>Iatrogênicas:</strong> VM com hiperventilação</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">3</div><div class="step-label">Compensação renal</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Aguda (≤48h):</strong> ↓ 2 mEq/L HCO₃ / 10 mmHg PaCO₂<br><strong>Crônica (&gt;3–5d):</strong> ↓ 4–5 mEq/L HCO₃ / 10 mmHg PaCO₂</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">4</div><div class="step-label">Manifestações</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Neurológicas:</strong> tontura, parestesias, síncope, convulsões<br><strong>Musculares:</strong> tetania, cãibras (hipocalcemia ionizada)<br><strong>CV:</strong> arritmias, palpitações</div></div>
-        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">5</div><div class="step-label">Tratamento</div><div class="step-chevron">▼</div></div><div class="step-body">Tratar causa (hipoxemia, febre, dor, sepse) · Corrigir hiperventilação · Em VM: ↓ FR e/ou ↓ VC<br><br>Bicarbonato: <span class="badge b-red">Não indicado</span></div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">2</div><div class="step-label">Causas</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Hipoxemia:</strong> pneumonia, TEP, edema pulmonar, altitude, cardiopatia cianótica<br><strong>Sistêmicas:</strong> sepse precoce, febre, anemia grave, tireotoxicose, gravidez, dor<br><strong>SNC:</strong> AVC, TCE, tumor, meningite, hiperamoniemia, síndrome de Reye<br><strong>Respiratório:</strong> TEP, fibrose intersticial inicial (↓PaO₂ → hiperventilação)<br><strong>Iatrogênica:</strong> VM com FR/VC excessivos, broncoespasmo pós-broncodilatador</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">3</div><div class="step-label">Compensação renal</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Mecanismo:</strong> rim excreta HCO₃⁻ e retém H⁺ — processo lento (dias)<br><br><div class="tbl-wrap"><table class="tbl"><tr><th>Fase</th><th>Tempo</th><th>Fórmula</th><th>Δ/10mmHg</th></tr><tr><td>Aguda</td><td>min–horas</td><td>HCO₃⁻ = 24 − 0,2×(40−PaCO₂)</td><td>−2 mEq/L</td></tr><tr><td>Crônica</td><td>&gt;3–5d</td><td>HCO₃⁻ = 24 − 0,5×(40−PaCO₂)</td><td>−5 mEq/L</td></tr></table></div><br>Mínimo de compensação: HCO₃⁻ ≈ 15 mEq/L</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">4</div><div class="step-label">Manifestações</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Neurológico:</strong> tontura, parestesias periorais e distais, síncope, convulsões<br><strong>Muscular:</strong> tetania, espasmo carpal/pedal (sinal de Trousseau), fraqueza<br><strong>Cardiovascular:</strong> arritmias, palpitações, ↓ DC (vasoconstrição cerebral)<br><strong>Metabólico:</strong> ↓ Ca²⁺ ionizado (pH alto → Ca ligado à albumina), ↓K⁺, ↓PO₄³⁻<br><strong>Atenção:</strong> vasoconstrição cerebral → perigosa em TCE</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">5</div><div class="step-label">Tratamento — passo a passo</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>1.</strong> Tratar causa primária (hipoxemia, febre, dor, sepse, anemia)<br><strong>2.</strong> Ansiedade/hiperventilação: técnica respiratória, sedação leve se necessário<br><strong>3.</strong> Em VM: ↓ FR e/ou VC, adicionar espaço morto, ajustar PEEP<br><strong>4.</strong> Tetania: gluconato de cálcio 10% 0,5–1 mL/kg IV lento<br><strong>5.</strong> Corrigir K⁺ se hipocalemia sintomática<br><strong>6.</strong> Crônica: geralmente não requer tratamento específico<br><br>Bicarbonato: <span class="badge b-red">Contraindicado</span></div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">6</div><div class="step-label">Gravidade clínica</div><div class="step-chevron">▼</div></div><div class="step-body"><div class="tbl-wrap"><table class="tbl"><tr><th>Grau</th><th>pH</th><th>PaCO₂</th><th>Critério clínico</th></tr><tr><td><span class="badge b-blue">Leve</span></td><td>7,45–7,55</td><td>28–35</td><td>Assintomático ou tontura leve</td></tr><tr><td><span class="badge b-amber">Moderada</span></td><td>7,55–7,65</td><td>22–28</td><td>Parestesias, tetania leve, arritmias leves</td></tr><tr><td><span class="badge b-red">Grave</span></td><td>&gt; 7,65</td><td>&lt; 22</td><td>Tetania franca, convulsões, síncope</td></tr></table></div></div></div>
       </div>
     </div>
   </div>
@@ -158,7 +203,7 @@
     <div>
       <div class="card">
         <div class="section">razão ΔAG / ΔHCO₃⁻</div>
-        <div class="formula">ΔAG = AG medido − 10<br>ΔHCO₃⁻ = 24 − HCO₃⁻ medido<br>Razão = ΔAG / ΔHCO₃⁻</div>
+        <div class="formula">ΔAG = AG corrigido − 12<br>ΔHCO₃⁻ = 24 − HCO₃⁻ medido<br>Razão = ΔAG / ΔHCO₃⁻</div>
         <div id="res-delta" style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Calcule o AG para ver a razão aqui.</div>
         <div class="divider"></div>
         <div style="font-size:12px;color:var(--text-secondary);line-height:2">
@@ -173,10 +218,28 @@
         <div class="formula">HCO₃⁻ corrigido = HCO₃⁻ medido + ΔAG</div>
         <div id="res-hco3c" style="font-size:12px;color:var(--text-secondary);line-height:1.7">Calcule o AG primeiro.</div>
         <div class="divider"></div>
-        <div class="section">causas de AG aumentado</div>
-        <div class="tags"><span class="badge b-red">Láctico</span><span class="badge b-red">Cetoacidose</span><span class="badge b-red">Uremia</span><span class="badge b-amber">Salicilato</span><span class="badge b-amber">Metanol</span><span class="badge b-amber">Etilenoglicol</span></div>
-        <div class="section" style="margin-top:12px">AG normal — hiperclorêmica</div>
-        <div class="tags"><span class="badge b-gray">Diarreia</span><span class="badge b-gray">Soro fisiológico</span><span class="badge b-gray">RTA</span><span class="badge b-gray">Ureterostomia</span></div>
+        <div class="section">causas de AG aumentado — MUDPILES</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Letra</th><th>Causa</th><th>Mecanismo / contexto</th></tr>
+          <tr><td><span class="badge b-red">M</span></td><td>Metanol</td><td>→ ácido fórmico; cegueira</td></tr>
+          <tr><td><span class="badge b-red">U</span></td><td>Uremia</td><td>Ácidos org. acumulados; DRC/AKI</td></tr>
+          <tr><td><span class="badge b-red">D</span></td><td>Cetoacidose (D)</td><td>DM1, álcool, jejum prolongado</td></tr>
+          <tr><td><span class="badge b-amber">P</span></td><td>Paraldéido</td><td>Raro, uso histórico</td></tr>
+          <tr><td><span class="badge b-amber">I</span></td><td>Isoniazida / isopropanol</td><td>Intoxicação; convulsões</td></tr>
+          <tr><td><span class="badge b-amber">L</span></td><td>Láctico</td><td>Hipoperfusão, sepse, metformina (tipo B)</td></tr>
+          <tr><td><span class="badge b-amber">E</span></td><td>Etilenoglicol</td><td>Anticongelante → ác. oxálico; IRA</td></tr>
+          <tr><td><span class="badge b-blue">S</span></td><td>Salicilato</td><td>AAS → ac. resp + met. mista</td></tr>
+        </table></div>
+        <div class="section" style="margin-top:12px">AG normal — acidose hiperclorêmica — USED</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Causa</th><th>Contexto clínico</th></tr>
+          <tr><td>Diarreia</td><td>Perda de HCO₃⁻ — mais comum em pediatria</td></tr>
+          <tr><td>Soro fisiológico excessivo</td><td>Sobrecarga de Cl⁻</td></tr>
+          <tr><td>ATR distal (tipo I)</td><td>Falha na excreção de H⁺; hipocalemia, nefrocalcinose</td></tr>
+          <tr><td>ATR proximal (tipo II)</td><td>Falha na reabsorção de HCO₃⁻; Fanconi</td></tr>
+          <tr><td>ATR tipo IV</td><td>Hiperkaliemia; hipoaldosteronismo; DM</td></tr>
+          <tr><td>Ureterostomia</td><td>Reabsorção de NH₄Cl pela mucosa intestinal</td></tr>
+        </table></div>
       </div>
     </div>
   </div>
@@ -211,21 +274,41 @@
     <div>
       <div class="card">
         <div class="section">indicações de TRS — AEIOU</div>
-        <div style="font-size:12px;line-height:1;color:var(--text-secondary)">
-          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-red">A</span><span>Acidose refratária · pH ≤ 7,1 persistente</span></div>
-          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-amber">E</span><span>Eletrólitos · K⁺ ≥ 6,5 mEq/L refratário + ECG</span></div>
-          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-blue">I</span><span>Intoxicações dializáveis</span></div>
-          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-teal">O</span><span>Overload · sobrecarga volêmica com repercussão</span></div>
-          <div style="padding:8px 0;display:flex;align-items:flex-start;gap:8px"><span class="badge b-gray">U</span><span>Uremia · encefalopatia, pericardite, sangramento</span></div>
+        <div style="font-size:12px;line-height:1.5;color:var(--text-secondary)">
+          <div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span class="badge b-red">A</span><strong style="color:var(--text-primary)">Acidose refratária</strong></div>pH ≤ 7,1 persistente após tratamento clínico · HCO₃⁻ &lt; 8 com colapso eminente · Não responde a bicarbonato</div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span class="badge b-amber">E</span><strong style="color:var(--text-primary)">Eletrólitos</strong></div>K⁺ ≥ 6,5 mEq/L refratário · alterações no ECG (onda T apiculada, QRS alargado) · Na⁺ &lt; 115 ou &gt; 160 sintomático</div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span class="badge b-blue">I</span><strong style="color:var(--text-primary)">Intoxicações dializáveis</strong></div>Metanol · Etilenoglicol · Salicilatos · Lítio · Metformina (acidose láctica B) · Teofilina</div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span class="badge b-teal">O</span><strong style="color:var(--text-primary)">Overload volêmico</strong></div>Sobrecarga ≥ 10% do peso · edema pulmonar refratário a diuréticos · hipertensão grave</div>
+          <div style="padding:8px 0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span class="badge b-gray">U</span><strong style="color:var(--text-primary)">Uremia sintomática</strong></div>Encefalopatia urêmica · pericardite urêmica · sangramento (plaquetas disfuncionais) · ureia &gt; 200 sintomática</div>
         </div>
         <div class="divider"></div>
         <div class="section">bicarbonato na AKI</div>
-        <div style="font-size:12px;color:var(--text-secondary);line-height:1">
-          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-green">Indicado</span><span>pH ≤ 7,1 + repercussão hemodinâmica</span></div>
-          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-green">Indicado</span><span>pH &lt; 7,0 mesmo sem instabilidade</span></div>
-          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-red">Não indicar</span><span>pH &gt; 7,1 sem repercussão clínica</span></div>
-          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-red">Não indicar</span><span>HCO₃⁻ baixo isolado · rotina na AKI</span></div>
-        </div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Conduta</th><th>Critério</th></tr>
+          <tr><td><span class="badge b-red">Indicado</span></td><td>pH &lt; 7,0 mesmo sem instabilidade HD</td></tr>
+          <tr><td><span class="badge b-red">Indicado</span></td><td>pH ≤ 7,1 + repercussão hemodinâmica</td></tr>
+          <tr><td><span class="badge b-amber">Avaliar</span></td><td>pH 7,1–7,2 + instabilidade + sem opção TRS imediata</td></tr>
+          <tr><td><span class="badge b-gray">Não indicar</span></td><td>pH &gt; 7,1 sem repercussão clínica</td></tr>
+          <tr><td><span class="badge b-gray">Não indicar</span></td><td>HCO₃⁻ baixo isolado sem acidemia</td></tr>
+        </table></div>
+        <div class="divider"></div>
+        <div class="section">tipos de acidose na AKI</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Tipo</th><th>AG</th><th>Mecanismo</th></tr>
+          <tr><td>Urêmica</td><td><span class="badge b-red">↑</span></td><td>Acúmulo de ácidos orgânicos</td></tr>
+          <tr><td>Dilucional</td><td><span class="badge b-gray">Normal</span></td><td>Diluição do HCO₃⁻ por expansão volêmica</td></tr>
+          <tr><td>ATR tipo IV</td><td><span class="badge b-gray">Normal</span></td><td>Hiperkaliemia + ↓ aldosterona</td></tr>
+          <tr><td>Láctica</td><td><span class="badge b-red">↑</span></td><td>Hipoperfusão renal ou baixo débito</td></tr>
+        </table></div>
+        <div class="divider"></div>
+        <div class="section">modalidades de TRS pediátrica</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Modalidade</th><th>Indicação preferencial</th><th>Vantagem</th></tr>
+          <tr><td>CVVH / CVVHDF</td><td>Instabilidade hemodinâmica</td><td>Controle gradual, tolerância hemodinâmica</td></tr>
+          <tr><td>Hemodiálise</td><td>Intoxicação, estabilidade HD</td><td>Rápida depuração de toxinas</td></tr>
+          <tr><td>Diálise peritoneal</td><td>Neonatos / &lt; 10 kg</td><td>Sem anticoagulação; acesso simples</td></tr>
+          <tr><td>SLED</td><td>Transição CVVH → HD</td><td>Flexibilidade de duração</td></tr>
+        </table></div>
       </div>
     </div>
   </div>
@@ -274,7 +357,24 @@
         </div>
         <div class="divider"></div>
         <div class="section">indicações de tratamento específico</div>
-        <div class="tags"><span class="badge b-red">pH &gt; 7,55</span><span class="badge b-red">Arritmias</span><span class="badge b-amber">Hipocalemia</span><span class="badge b-amber">Instabilidade hemodinâmica</span></div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Prioridade</th><th>Critério</th></tr>
+          <tr><td><span class="badge b-red">Urgente</span></td><td>pH &gt; 7,60 ou arritmias graves</td></tr>
+          <tr><td><span class="badge b-red">Urgente</span></td><td>Tetania ou convulsões</td></tr>
+          <tr><td><span class="badge b-amber">Tratar</span></td><td>pH &gt; 7,55 com instabilidade hemodinâmica</td></tr>
+          <tr><td><span class="badge b-amber">Tratar</span></td><td>K⁺ &lt; 2,5 mEq/L ou hipocalemia sintomática</td></tr>
+          <tr><td><span class="badge b-blue">Monitorar</span></td><td>pH 7,50–7,55 assintomático — tratar causa</td></tr>
+        </table></div>
+        <div class="divider"></div>
+        <div class="section">complicações da alcalose metabólica</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:2">
+          <div><span class="badge b-amber">↓ K⁺</span>&nbsp; H⁺ troca com K⁺ intracelular → hipocalemia</div>
+          <div><span class="badge b-amber">↓ Ca²⁺ ion.</span>&nbsp; Mais Ca²⁺ ligado à albumina em pH alto → tetania</div>
+          <div><span class="badge b-red">Arritmias</span>&nbsp; FA, TSV, TV — especialmente com hipocalemia</div>
+          <div><span class="badge b-red">Convulsões</span>&nbsp; Excitabilidade neuronal por hipocalcemia</div>
+          <div><span class="badge b-gray">↓ Entrega O₂</span>&nbsp; Curva Hb→ esquerda — efeito Bohr</div>
+          <div><span class="badge b-gray">↑ PaCO₂ comp.</span>&nbsp; Hipoventilação — cuidado em VM ou PCR</div>
+        </div>
       </div>
     </div>
   </div>
@@ -334,7 +434,28 @@
         <div class="tags"><span class="badge b-red">Catecolaminas</span><span class="badge b-red">Gluconato Ca²⁺</span><span class="badge b-red">Fosfatos</span><span class="badge b-amber">Soluções ácidas</span></div>
         <div class="divider"></div>
         <div class="section">efeitos adversos</div>
-        <div class="tags"><span class="badge b-gray">Alcalose metab.</span><span class="badge b-gray">Hipernatremia</span><span class="badge b-gray">Hipocalemia</span><span class="badge b-gray">↑ PaCO₂</span></div>
+        <div class="tags"><span class="badge b-gray">Alcalose metab.</span><span class="badge b-gray">Hipernatremia</span><span class="badge b-gray">Hipocalemia</span><span class="badge b-gray">↑ PaCO₂</span><span class="badge b-gray">Sobrecarga volêmica</span></div>
+        <div class="divider"></div>
+        <div class="section">indicações por gravidade</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>pH</th><th>HCO₃⁻</th><th>Conduta</th></tr>
+          <tr><td>&gt; 7,20</td><td>&gt; 16</td><td><span class="badge b-gray">Observar · tratar causa</span></td></tr>
+          <tr><td>7,10–7,20</td><td>10–16</td><td><span class="badge b-amber">Avaliar individualmente</span></td></tr>
+          <tr><td>&lt; 7,10</td><td>&lt; 10</td><td><span class="badge b-red">Considerar bicarbonato</span></td></tr>
+          <tr><td>&lt; 7,00</td><td>&lt; 8</td><td><span class="badge b-red">Bicarbonato + considerar TRS</span></td></tr>
+        </table></div>
+        <div class="divider"></div>
+        <div class="section">metas de reavaliação</div>
+        <div class="info-row"><span>1ª gasometria após dose</span><span>30–60 min após infusão</span></div>
+        <div class="info-row"><span>Meta pH</span><span>≥ 7,20 — não corrigir para 7,40</span></div>
+        <div class="info-row"><span>Meta HCO₃⁻</span><span>15–18 mEq/L (não 24)</span></div>
+        <div class="info-row"><span>Monitorar Na⁺</span><span>BIC 8,4% = 1 mEq Na⁺/mEq HCO₃⁻</span></div>
+        <div class="divider"></div>
+        <div class="section">velocidade de infusão</div>
+        <div class="info-row"><span>50% da dose inicial</span><span>30–60 min (fase aguda)</span></div>
+        <div class="info-row"><span>Dose restante</span><span>Somente após reavaliação gasométrica</span></div>
+        <div class="info-row"><span>PCR</span><span>1 mEq/kg IV em bolus — BIC 8,4%</span></div>
+        <div class="info-row"><span>Infusão contínua</span><span>BIC 1,5% (0,18 mEq/mL) em SG 5%</span></div>
       </div>
     </div>
   </div>
