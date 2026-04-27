@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UTI Pediátrica — Ácido-Base</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --blue:#4262FF;
+  --blue-dark:#2D4FD9;
+  --blue-light:#EEF1FF;
+  --bg-page:#F0EFF4;
+  --bg-card:#FFFFFF;
+  --bg-secondary:#F5F5F5;
+  --text-primary:#1A1A1A;
+  --text-secondary:#555555;
+  --text-tertiary:#9A9A9A;
+  --border:#E3E3E3;
+  --border-focus:#4262FF;
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:14px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,.10),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.12),0 4px 8px rgba(0,0,0,.06);
+
+  --danger-bg:#FEF2F2;--danger-text:#991B1B;--danger-border:#FECACA;--danger-accent:#E53E3E;
+  --warn-bg:#FFFBEB;--warn-text:#92400E;--warn-border:#FDE68A;--warn-accent:#F59E0B;
+  --success-bg:#F0FDF4;--success-text:#166534;--success-border:#BBF7D0;--success-accent:#22C55E;
+  --info-bg:#EFF6FF;--info-text:#1E40AF;--info-border:#BFDBFE;--info-accent:#3B82F6;
+  --neutral-bg:#F9F9F9;--neutral-text:#374151;--neutral-border:#E5E7EB;
+}
+
+body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-primary);min-height:100vh;padding:0}
+
+.app{max-width:960px;margin:0 auto;padding:24px 20px 48px}
+
+/* ── Topbar ───────────────────────────────────────── */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-icon{width:36px;height:36px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-icon svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text-primary);line-height:1.2}
+.topbar-sub{font-size:12px;color:var(--text-tertiary);margin-top:1px}
+.topbar-badge{font-size:11px;padding:4px 10px;background:var(--blue-light);color:var(--blue);border-radius:20px;font-weight:600;white-space:nowrap}
+
+/* ── Nav tabs ─────────────────────────────────────── */
+.nav-wrap{background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:4px;display:flex;gap:2px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;padding:8px 16px;font-size:13px;font-weight:500;background:transparent;border:none;border-radius:var(--radius-md);cursor:pointer;color:var(--text-secondary);display:flex;align-items:center;gap:6px;transition:all .15s;font-family:'Inter',sans-serif}
+.nav-btn .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.35;flex-shrink:0;transition:opacity .15s}
+.nav-btn:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.nav-btn.on{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(66,98,255,.35)}
+.nav-btn.on .dot{opacity:1;background:#fff}
+
+/* ── Panes ────────────────────────────────────────── */
+.pane{display:none}.pane.on{display:block}
+
+/* ── Grid ─────────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media(max-width:640px){.g2{grid-template-columns:1fr}}
+
+/* ── Cards ────────────────────────────────────────── */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow-sm)}
+.card+.card,.card+.mcard,.mcard+.card{margin-top:12px}
+.mcard{background:var(--bg-secondary);border-radius:var(--radius-md);padding:14px;border:1px solid var(--border)}
+.section{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--text-tertiary);text-transform:uppercase;margin-bottom:10px}
+
+/* ── Form rows ────────────────────────────────────── */
+.row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.row label{font-size:12px;font-weight:500;color:var(--text-secondary);width:90px;flex-shrink:0}
+.row input,.row select{flex:1;height:34px;font-size:13px;padding:0 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:#fff;color:var(--text-primary);min-width:0;font-family:'Inter',sans-serif;transition:border-color .15s,box-shadow .15s;outline:none}
+.row input:focus,.row select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(66,98,255,.12)}
+.row input::placeholder{color:var(--text-tertiary)}
+.row .unit{font-size:11px;color:var(--text-tertiary);width:60px;text-align:right;flex-shrink:0}
+.divider{height:1px;background:var(--border);margin:14px 0}
+
+/* ── Buttons ──────────────────────────────────────── */
+.btn-calc{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;font-size:13px;font-weight:600;border:1.5px solid var(--border);border-radius:var(--radius-md);background:#fff;cursor:pointer;color:var(--text-primary);margin-top:12px;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-calc:hover{background:var(--bg-secondary);border-color:#ccc}
+.btn-calc:active{transform:scale(.99)}
+.btn-calc.primary{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 2px 8px rgba(66,98,255,.35)}
+.btn-calc.primary:hover{background:var(--blue-dark);border-color:var(--blue-dark)}
+
+/* ── Results ──────────────────────────────────────── */
+.result{display:none;margin-top:14px;border-radius:var(--radius-md);overflow:hidden;border:1px solid}
+.result.on{display:block}
+.result-head{padding:10px 14px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.result-head::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.result-body{padding:12px 14px;font-size:12px;line-height:1.75;border-top:1px solid}
+.r-danger{border-color:var(--danger-border)}
+.r-danger .result-head{background:var(--danger-bg);color:var(--danger-text)}
+.r-danger .result-head::before{background:var(--danger-accent)}
+.r-danger .result-body{background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-border)}
+.r-info{border-color:var(--info-border)}
+.r-info .result-head{background:var(--info-bg);color:var(--info-text)}
+.r-info .result-head::before{background:var(--info-accent)}
+.r-info .result-body{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+.r-success{border-color:var(--success-border)}
+.r-success .result-head{background:var(--success-bg);color:var(--success-text)}
+.r-success .result-head::before{background:var(--success-accent)}
+.r-success .result-body{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border)}
+.r-warn{border-color:var(--warn-border)}
+.r-warn .result-head{background:var(--warn-bg);color:var(--warn-text)}
+.r-warn .result-head::before{background:var(--warn-accent)}
+.r-warn .result-body{background:var(--warn-bg);color:var(--warn-text);border-color:var(--warn-border)}
+.r-neutral{border-color:var(--neutral-border)}
+.r-neutral .result-head{background:var(--neutral-bg);color:var(--neutral-text)}
+.r-neutral .result-head::before{background:#9CA3AF}
+.r-neutral .result-body{background:var(--neutral-bg);color:var(--text-secondary);border-color:var(--neutral-border)}
+
+/* ── Ref grid ─────────────────────────────────────── */
+.ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.ref-cell{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 8px;text-align:center}
+.ref-val{font-size:13px;font-weight:700;color:var(--text-primary)}
+.ref-lbl{font-size:10px;color:var(--text-tertiary);margin-top:2px}
+
+/* ── Accordion steps ──────────────────────────────── */
+.step{border:1.5px solid var(--border);border-radius:var(--radius-md);margin-bottom:6px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.step:hover{border-color:#B0B0B0;box-shadow:var(--shadow-sm)}
+.step.open{border-color:var(--blue);box-shadow:0 0 0 3px rgba(66,98,255,.10)}
+.step-hd{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:var(--bg-secondary);color:var(--text-secondary);transition:all .15s}
+.step.open .step-num{background:var(--blue);color:#fff}
+.step-label{font-size:13px;font-weight:500;flex:1}
+.step-chevron{font-size:10px;color:var(--text-tertiary);transition:transform .15s}
+.step.open .step-chevron{transform:rotate(180deg)}
+.step-body{display:none;padding:0 14px 14px 48px;font-size:12px;color:var(--text-secondary);line-height:1.7}
+.step.open .step-body{display:block}
+
+/* ── Badges ───────────────────────────────────────── */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;line-height:1.6;white-space:nowrap}
+.b-red{background:var(--danger-bg);color:var(--danger-text)}
+.b-blue{background:var(--info-bg);color:var(--info-text)}
+.b-green{background:var(--success-bg);color:var(--success-text)}
+.b-amber{background:var(--warn-bg);color:var(--warn-text)}
+.b-gray{background:#F3F4F6;color:#374151}
+.b-teal{background:#F0FDF9;color:#065F46}
+
+/* ── Alerts ───────────────────────────────────────── */
+.alert{padding:10px 14px;border-radius:var(--radius-md);font-size:12px;line-height:1.6;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;border:1px solid}
+.alert-icon{flex-shrink:0;font-size:14px;line-height:1.4}
+.a-danger{background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-border)}
+.a-warn{background:var(--warn-bg);color:var(--warn-text);border-color:var(--warn-border)}
+.a-info{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+
+/* ── Tables ───────────────────────────────────────── */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border)}
+.tbl th{padding:8px 10px;font-weight:600;background:var(--bg-secondary);color:var(--text-secondary);font-size:11px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.45}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#FAFAFA}
+.th-blue{background:var(--info-bg);color:var(--info-text)}
+.th-red{background:var(--danger-bg);color:var(--danger-text)}
+.th-green{background:var(--success-bg);color:var(--success-text)}
+.th-amber{background:var(--warn-bg);color:var(--warn-text)}
+.s1{background:var(--success-bg);color:var(--success-text);font-weight:600}
+.s2{background:var(--warn-bg);color:var(--warn-text);font-weight:600}
+.s3{background:var(--danger-bg);color:var(--danger-text);font-weight:600}
+
+/* ── Formula box ──────────────────────────────────── */
+.formula{font-family:'Fira Mono','Courier New',monospace;font-size:11px;padding:10px 12px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-secondary);line-height:1.75;margin-bottom:12px}
+
+/* ── Tags ─────────────────────────────────────────── */
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+
+/* ── Info rows ────────────────────────────────────── */
+.info-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.info-row:last-child{border-bottom:none}
+.info-row span:first-child{color:var(--text-secondary)}
+.info-row span:last-child{font-weight:600;color:var(--text-primary)}
+
+/* ── Accent border on cards ───────────────────────── */
+.card-danger{border-top:3px solid var(--danger-accent)!important}
+.card-info{border-top:3px solid var(--info-accent)!important}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-icon">
+      <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    </div>
+    <div>
+      <div class="topbar-title">UTI Pediátrica — Ácido-Base</div>
+      <div class="topbar-sub">Calculadoras interativas · Fluxogramas clínicos</div>
+    </div>
+  </div>
+  <div class="topbar-badge">ISPAD 2024 · KDIGO · Surviving Sepsis</div>
+</div>
+
+<!-- Nav -->
+<div class="nav-wrap">
+  <button class="nav-btn on" onclick="nav(this,'gas')"><span class="dot"></span>Gasometria</button>
+  <button class="nav-btn" onclick="nav(this,'resp')"><span class="dot"></span>Distúrbios resp.</button>
+  <button class="nav-btn" onclick="nav(this,'ag')"><span class="dot"></span>Ânion gap</button>
+  <button class="nav-btn" onclick="nav(this,'aki')"><span class="dot"></span>AKI + acidose</button>
+  <button class="nav-btn" onclick="nav(this,'alc')"><span class="dot"></span>Alcalose metab.</button>
+  <button class="nav-btn" onclick="nav(this,'bic')"><span class="dot"></span>Bicarbonato</button>
+</div>
+
+<!-- ═══ GASOMETRIA ═══════════════════════════════════ -->
+<div id="p-gas" class="pane on">
+  <div class="alert a-warn">
+    <span class="alert-icon">⚠️</span>
+    <span>pH normal não exclui distúrbio ácido-básico. Analise sempre PaCO₂, HCO₃⁻ e BE. pH fatal: &lt; 7,10 ou &gt; 7,60.</span>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="section">entrada de dados</div>
+        <div class="row"><label>pH</label><input type="number" id="g-ph" step="0.01" placeholder="7.40"/><span class="unit">7,35–7,45</span></div>
+        <div class="row"><label>PaCO₂</label><input type="number" id="g-pco2" step="1" placeholder="40"/><span class="unit">35–45 mmHg</span></div>
+        <div class="row"><label>HCO₃⁻</label><input type="number" id="g-hco3" step="0.5" placeholder="24"/><span class="unit">22–26 mEq/L</span></div>
+        <div class="row"><label>BE</label><input type="number" id="g-be" step="0.5" placeholder="0"/><span class="unit">-2 a +2</span></div>
+        <button class="btn-calc primary" onclick="calcGas()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Interpretar gasometria
+        </button>
+      </div>
+      <div class="divider"></div>
+      <div class="section">valores de referência pediátrica</div>
+      <div class="ref-grid">
+        <div class="ref-cell"><div class="ref-val">7,35–7,45</div><div class="ref-lbl">pH</div></div>
+        <div class="ref-cell"><div class="ref-val">35–45</div><div class="ref-lbl">PaCO₂ mmHg</div></div>
+        <div class="ref-cell"><div class="ref-val">22–26</div><div class="ref-lbl">HCO₃⁻ mEq/L</div></div>
+        <div class="ref-cell"><div class="ref-val">-2 a +2</div><div class="ref-lbl">BE mEq/L</div></div>
+        <div class="ref-cell"><div class="ref-val">135–145</div><div class="ref-lbl">Na⁺ mEq/L</div></div>
+        <div class="ref-cell"><div class="ref-val">≥ 94%</div><div class="ref-lbl">SatO₂</div></div>
+      </div>
+    </div>
+    <div>
+      <div id="res-gas" class="result"><div id="res-gas-hd" class="result-head"></div><div id="res-gas-bd" class="result-body"></div></div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">regras de compensação</div>
+        <div style="font-size:12px;line-height:1.85;color:var(--text-secondary)">
+          <div style="margin-bottom:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Ac. resp. aguda</span><br>HCO₃ = 24 + (0,1–0,2) × (PaCO₂ − 40)</div>
+          <div style="margin-bottom:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Ac. resp. crônica</span><br>HCO₃ = 24 + 0,35 × (PaCO₂ − 40)</div>
+          <div style="margin-bottom:10px;padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Alc. resp. aguda</span><br>HCO₃ = 24 − 0,2 × (40 − PaCO₂)</div>
+          <div style="padding:8px;background:var(--bg-secondary);border-radius:var(--radius-sm)"><span style="font-weight:600;color:var(--text-primary)">Ac. metabólica (Winter)</span><br>PaCO₂ = (1,3–1,5) × HCO₃ + 8 ± 2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DISTÚRBIOS RESPIRATÓRIOS ════════════════════ -->
+<div id="p-resp" class="pane">
+  <div class="g2">
+    <div>
+      <div class="card card-danger">
+        <div class="section" style="color:var(--danger-text)">acidose respiratória</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px">↑ PaCO₂ · ↓ pH · ↑ HCO₃⁻ (compensação)</div>
+        <div class="step open" onclick="tog(this)"><div class="step-hd"><div class="step-num">1</div><div class="step-label">Fisiopatologia</div><div class="step-chevron">▼</div></div><div class="step-body">Hipoventilação → retenção CO₂ → CO₂+H₂O → H₂CO₃ → H⁺+HCO₃⁻ → ↑H⁺ → ↓pH</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">2</div><div class="step-label">Causas</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Centrais:</strong> opioides, sedação, TCE, AVC<br><strong>Pulmonares:</strong> DPOC, asma grave, pneumonia, SDRA<br><strong>Neuromusculares:</strong> Guillain-Barré, miopatias<br><strong>VM:</strong> volume corrente baixo, FR baixa</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">3</div><div class="step-label">Compensação renal</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Aguda (≤48h):</strong> ↑ 1 mEq/L HCO₃ / 10 mmHg PaCO₂<br><strong>Crônica (&gt;3–5d):</strong> ↑ 3–4 mEq/L HCO₃ / 10 mmHg PaCO₂</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">4</div><div class="step-label">Manifestações</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Neurológicas:</strong> sonolência, cefaleia, confusão, asterix<br><strong>CV:</strong> vasodilatação, hipotensão, arritmias<br><strong>Metabólicas:</strong> hipercalemia, acidemia</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">5</div><div class="step-label">Tratamento</div><div class="step-chevron">▼</div></div><div class="step-body">Tratar causa · Melhorar ventilação · O₂ · VNI se indicado · Ajustes ventilatórios (↑ VC e/ou FR)<br><br>Bicarbonato: <span class="badge b-red">Não indicado</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-info">
+        <div class="section" style="color:var(--info-text)">alcalose respiratória</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px">↓ PaCO₂ · ↑ pH · ↓ HCO₃⁻ (compensação)</div>
+        <div class="step open" onclick="tog(this)"><div class="step-hd"><div class="step-num">1</div><div class="step-label">Fisiopatologia</div><div class="step-chevron">▼</div></div><div class="step-body">Hiperventilação → ↓CO₂ → ↓H₂CO₃ → ↓H⁺ → ↑pH (alcalose)</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">2</div><div class="step-label">Causas</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Hipoxemia:</strong> pneumonia, TEP, edema pulmonar<br><strong>Sistêmicas:</strong> sepse, febre, dor, anemia<br><strong>Neurológicas:</strong> ansiedade, dor, TCE, convulsões<br><strong>Iatrogênicas:</strong> VM com hiperventilação</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">3</div><div class="step-label">Compensação renal</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Aguda (≤48h):</strong> ↓ 2 mEq/L HCO₃ / 10 mmHg PaCO₂<br><strong>Crônica (&gt;3–5d):</strong> ↓ 4–5 mEq/L HCO₃ / 10 mmHg PaCO₂</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">4</div><div class="step-label">Manifestações</div><div class="step-chevron">▼</div></div><div class="step-body"><strong>Neurológicas:</strong> tontura, parestesias, síncope, convulsões<br><strong>Musculares:</strong> tetania, cãibras (hipocalcemia ionizada)<br><strong>CV:</strong> arritmias, palpitações</div></div>
+        <div class="step" onclick="tog(this)"><div class="step-hd"><div class="step-num">5</div><div class="step-label">Tratamento</div><div class="step-chevron">▼</div></div><div class="step-body">Tratar causa (hipoxemia, febre, dor, sepse) · Corrigir hiperventilação · Em VM: ↓ FR e/ou ↓ VC<br><br>Bicarbonato: <span class="badge b-red">Não indicado</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mcard" style="margin-top:12px;text-align:center;font-size:12px;color:var(--text-secondary)">
+    Distúrbios respiratórios não se corrigem com bicarbonato · Corrija a ventilação e trate a causa de base
+  </div>
+</div>
+
+<!-- ═══ ÂNION GAP ════════════════════════════════════ -->
+<div id="p-ag" class="pane">
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="section">calculadora de ânion gap</div>
+        <div class="formula">AG = Na⁺ − (Cl⁻ + HCO₃⁻)<br>Referência: 8–12 mEq/L (albumina 4 g/dL)</div>
+        <div class="row"><label>Na⁺</label><input type="number" id="ag-na" placeholder="140"/><span class="unit">135–145</span></div>
+        <div class="row"><label>Cl⁻</label><input type="number" id="ag-cl" placeholder="102"/><span class="unit">98–106</span></div>
+        <div class="row"><label>HCO₃⁻</label><input type="number" id="ag-hco3" placeholder="24"/><span class="unit">22–26</span></div>
+        <div class="row"><label>Albumina</label><input type="number" id="ag-alb" step="0.1" placeholder="4.0"/><span class="unit">3,5–5,0 g/dL</span></div>
+        <button class="btn-calc primary" onclick="calcAG()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Calcular ânion gap
+        </button>
+        <div id="res-ag" class="result"><div id="res-ag-hd" class="result-head"></div><div id="res-ag-bd" class="result-body"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="section">razão ΔAG / ΔHCO₃⁻</div>
+        <div class="formula">ΔAG = AG medido − 10<br>ΔHCO₃⁻ = 24 − HCO₃⁻ medido<br>Razão = ΔAG / ΔHCO₃⁻</div>
+        <div id="res-delta" style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Calcule o AG para ver a razão aqui.</div>
+        <div class="divider"></div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:2">
+          <div><span class="badge b-gray">0,8–1,2</span> &nbsp;Acidose metab. com AG elevado isolada</div>
+          <div><span class="badge b-amber">&lt; 0,8</span> &nbsp;+ acidose metab. hiperclorêmica</div>
+          <div><span class="badge b-blue">1,2–2</span> &nbsp;+ alcalose metabólica associada</div>
+          <div><span class="badge b-red">&gt; 2</span> &nbsp;Possível alcalose láctica / erro</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">HCO₃⁻ corrigido pelo AG</div>
+        <div class="formula">HCO₃⁻ corrigido = HCO₃⁻ medido + ΔAG</div>
+        <div id="res-hco3c" style="font-size:12px;color:var(--text-secondary);line-height:1.7">Calcule o AG primeiro.</div>
+        <div class="divider"></div>
+        <div class="section">causas de AG aumentado</div>
+        <div class="tags"><span class="badge b-red">Láctico</span><span class="badge b-red">Cetoacidose</span><span class="badge b-red">Uremia</span><span class="badge b-amber">Salicilato</span><span class="badge b-amber">Metanol</span><span class="badge b-amber">Etilenoglicol</span></div>
+        <div class="section" style="margin-top:12px">AG normal — hiperclorêmica</div>
+        <div class="tags"><span class="badge b-gray">Diarreia</span><span class="badge b-gray">Soro fisiológico</span><span class="badge b-gray">RTA</span><span class="badge b-gray">Ureterostomia</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AKI + ACIDOSE ════════════════════════════════ -->
+<div id="p-aki" class="pane">
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="section">estadiamento KDIGO pediátrico</div>
+        <div class="row"><label>Creat. basal</label><input type="number" id="cr-b" step="0.01" placeholder="0.50"/><span class="unit">mg/dL</span></div>
+        <div class="row"><label>Creat. atual</label><input type="number" id="cr-a" step="0.01" placeholder="0.90"/><span class="unit">mg/dL</span></div>
+        <div class="row"><label>Diurese</label><input type="number" id="cr-d" step="0.01" placeholder="0.4"/><span class="unit">mL/kg/h</span></div>
+        <button class="btn-calc primary" onclick="calcKDIGO()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Estadiar AKI
+        </button>
+        <div id="res-kdigo" class="result"><div id="res-kdigo-hd" class="result-head"></div><div id="res-kdigo-bd" class="result-body"></div></div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">tabela KDIGO</div>
+        <table class="tbl">
+          <tr><th>Estágio</th><th>Creatinina</th><th>Diurese</th></tr>
+          <tr><td class="s1">1 Leve</td><td>1,5–1,9× ou ≥0,3 mg/dL</td><td>&lt;0,5 mL/kg/h 6–12h</td></tr>
+          <tr><td class="s2">2 Moderado</td><td>2,0–2,9×</td><td>&lt;0,5 mL/kg/h ≥12h</td></tr>
+          <tr><td class="s3">3 Grave</td><td>≥3× ou ≥4,0 mg/dL</td><td>&lt;0,3 mL/kg/h ≥24h</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="section">indicações de TRS — AEIOU</div>
+        <div style="font-size:12px;line-height:1;color:var(--text-secondary)">
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-red">A</span><span>Acidose refratária · pH ≤ 7,1 persistente</span></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-amber">E</span><span>Eletrólitos · K⁺ ≥ 6,5 mEq/L refratário + ECG</span></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-blue">I</span><span>Intoxicações dializáveis</span></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:8px"><span class="badge b-teal">O</span><span>Overload · sobrecarga volêmica com repercussão</span></div>
+          <div style="padding:8px 0;display:flex;align-items:flex-start;gap:8px"><span class="badge b-gray">U</span><span>Uremia · encefalopatia, pericardite, sangramento</span></div>
+        </div>
+        <div class="divider"></div>
+        <div class="section">bicarbonato na AKI</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1">
+          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-green">Indicado</span><span>pH ≤ 7,1 + repercussão hemodinâmica</span></div>
+          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-green">Indicado</span><span>pH &lt; 7,0 mesmo sem instabilidade</span></div>
+          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-red">Não indicar</span><span>pH &gt; 7,1 sem repercussão clínica</span></div>
+          <div style="padding:5px 0;display:flex;align-items:center;gap:6px"><span class="badge b-red">Não indicar</span><span>HCO₃⁻ baixo isolado · rotina na AKI</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ALCALOSE METABÓLICA ══════════════════════════ -->
+<div id="p-alc" class="pane">
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="section">confirmar e classificar alcalose metabólica</div>
+        <div class="row"><label>pH</label><input type="number" id="al-ph" step="0.01" placeholder="7.50"/><span class="unit">ref. 7,45</span></div>
+        <div class="row"><label>HCO₃⁻</label><input type="number" id="al-hco3" step="0.5" placeholder="32"/><span class="unit">mEq/L</span></div>
+        <div class="row"><label>Cl⁻ urin.</label><input type="number" id="al-clur" step="1" placeholder="15"/><span class="unit">mEq/L</span></div>
+        <button class="btn-calc primary" onclick="calcAlc()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Classificar alcalose
+        </button>
+        <div id="res-alc" class="result"><div id="res-alc-hd" class="result-head"></div><div id="res-alc-bd" class="result-body"></div></div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="section">acetazolamida — dose pediátrica</div>
+        <div class="info-row"><span>Mecanismo</span><span>Inibe anidrase carbônica proximal → ↑ HCO₃⁻ na urina</span></div>
+        <div class="info-row"><span>Dose</span><span>5–10 mg/kg/dose</span></div>
+        <div class="info-row"><span>Via</span><span>IV ou VO</span></div>
+        <div class="info-row"><span>Frequência</span><span>a cada 6–8h</span></div>
+        <div class="info-row"><span>Dose máxima</span><span>500 mg/dose</span></div>
+        <div class="info-row"><span>Diluição IV</span><span>SF 0,9% 10 mg/mL · infundir 15–30 min</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="section">gravidade pelo pH</div>
+        <table class="tbl" style="margin-bottom:14px">
+          <tr><th>Grau</th><th>pH</th><th>HCO₃⁻</th><th>Clínica</th></tr>
+          <tr><td class="s1">Leve</td><td>7,45–7,50</td><td>28–32</td><td>Assintomática</td></tr>
+          <tr><td class="s2">Moderada</td><td>7,51–7,55</td><td>32–36</td><td>Leve</td></tr>
+          <tr><td class="s3">Grave</td><td>&gt; 7,55</td><td>&gt; 36</td><td>Importante</td></tr>
+        </table>
+        <div class="divider"></div>
+        <div class="section">causas por grupo</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:2">
+          <div><span class="badge b-blue">Cl⁻ responsivo</span>&nbsp; Vômitos · sonda · diuréticos prévios · depleção volume</div>
+          <div><span class="badge b-amber">Cl⁻ resistente</span>&nbsp; Hiperaldosteronismo · Bartter · Gitelman · diuréticos em uso</div>
+          <div><span class="badge b-gray">Outras</span>&nbsp; Pós-hipercapnia · carga de bicarbonato · hipocalemia grave</div>
+        </div>
+        <div class="divider"></div>
+        <div class="section">indicações de tratamento específico</div>
+        <div class="tags"><span class="badge b-red">pH &gt; 7,55</span><span class="badge b-red">Arritmias</span><span class="badge b-amber">Hipocalemia</span><span class="badge b-amber">Instabilidade hemodinâmica</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BICARBONATO ══════════════════════════════════ -->
+<div id="p-bic" class="pane">
+  <div class="alert a-danger">
+    <span class="alert-icon">🚨</span>
+    <span>Bicarbonato é exceção, não regra. Usar apenas com acidemia importante e repercussão clínica. Evitar correção completa e rápida.</span>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="card">
+        <div class="section">calculadora de dose</div>
+        <div class="formula">Déficit = 0,4 × Peso × (HCO₃ desejado − medido)<br>ou = 0,3–0,4 × Peso × |BE|</div>
+        <div class="row"><label>Peso (kg)</label><input type="number" id="b-kg" step="0.1" placeholder="15"/></div>
+        <div class="row"><label>HCO₃ medido</label><input type="number" id="b-hm" step="0.5" placeholder="12"/><span class="unit">mEq/L</span></div>
+        <div class="row"><label>HCO₃ desejado</label><input type="number" id="b-hd" step="0.5" placeholder="15"/><span class="unit">mEq/L</span></div>
+        <div class="row"><label>BE</label><input type="number" id="b-be" step="0.5" placeholder="-12"/><span class="unit">mEq/L</span></div>
+        <div class="row"><label>% a corrigir</label>
+          <select id="b-pct">
+            <option value="0.5">50% — inicial</option>
+            <option value="1.0">100% — completo</option>
+            <option value="0.3">30% — conservador</option>
+          </select>
+        </div>
+        <button class="btn-calc primary" onclick="calcBic()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Calcular dose
+        </button>
+        <div id="res-bic" class="result"><div id="res-bic-hd" class="result-head"></div><div id="res-bic-bd" class="result-body"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="section">classificação da acidose</div>
+        <table class="tbl" style="margin-bottom:12px">
+          <tr><th></th><th class="th-green">Leve</th><th class="th-amber">Moderada</th><th class="th-red">Grave</th></tr>
+          <tr><td style="color:var(--text-secondary);font-weight:500">pH</td><td>7,20–7,30</td><td>7,10–7,20</td><td>&lt; 7,10</td></tr>
+          <tr><td style="color:var(--text-secondary);font-weight:500">BE</td><td>-6 a -10</td><td>-10 a -16</td><td>≤ -16</td></tr>
+          <tr><td style="color:var(--text-secondary);font-weight:500">HCO₃⁻</td><td>16–18</td><td>10–15</td><td>&lt; 10</td></tr>
+        </table>
+        <div class="divider"></div>
+        <div class="section">concentrações disponíveis</div>
+        <div class="info-row"><span>8,4% (uso comum)</span><span>1 mEq/mL</span></div>
+        <div class="info-row"><span>4,2% (pediátrico)</span><span>0,5 mEq/mL</span></div>
+        <div class="info-row"><span>1,5% (infusão contínua)</span><span>0,18 mEq/mL</span></div>
+        <div class="divider"></div>
+        <div class="section">incompatibilidades</div>
+        <div class="tags"><span class="badge b-red">Catecolaminas</span><span class="badge b-red">Gluconato Ca²⁺</span><span class="badge b-red">Fosfatos</span><span class="badge b-amber">Soluções ácidas</span></div>
+        <div class="divider"></div>
+        <div class="section">efeitos adversos</div>
+        <div class="tags"><span class="badge b-gray">Alcalose metab.</span><span class="badge b-gray">Hipernatremia</span><span class="badge b-gray">Hipocalemia</span><span class="badge b-gray">↑ PaCO₂</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+function nav(btn,id){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('p-'+id).classList.add('on');
+}
+function tog(el){
+  const was=el.classList.contains('open');
+  el.closest('.card').querySelectorAll('.step').forEach(s=>s.classList.remove('open'));
+  if(!was) el.classList.add('open');
+}
+function setRes(pfx,cls,hd,bd){
+  const r=document.getElementById('res-'+pfx);
+  r.className='result on r-'+cls;
+  document.getElementById('res-'+pfx+'-hd').textContent=hd;
+  document.getElementById('res-'+pfx+'-bd').innerHTML=bd;
+}
+function calcGas(){
+  const ph=parseFloat(document.getElementById('g-ph').value);
+  const pco2=parseFloat(document.getElementById('g-pco2').value);
+  const hco3=parseFloat(document.getElementById('g-hco3').value);
+  const be=parseFloat(document.getElementById('g-be').value);
+  if(isNaN(ph)||isNaN(pco2)||isNaN(hco3)){alert('Preencha pH, PaCO₂ e HCO₃⁻');return;}
+  const acid=ph<7.35,alc=ph>7.45;
+  const co2h=pco2>45,co2l=pco2<35;
+  const h3h=hco3>26,h3l=hco3<22;
+  let dist,cls,bd='';
+  if(ph<7.10||ph>7.60) bd='<span class="badge b-red">pH fatal — risco elevado de morte</span><br><br>';
+  if(acid&&co2h){dist='Acidose respiratória';cls='danger';
+    const a=(24+(0.15*(pco2-40))).toFixed(1),c=(24+(0.35*(pco2-40))).toFixed(1);
+    bd+=`pH ${ph} · PaCO₂ ${pco2} mmHg · HCO₃⁻ ${hco3} mEq/L<br>Compensação esperada: <strong>aguda</strong> HCO₃⁻ ≈ ${a} | <strong>crônica</strong> ≈ ${c} mEq/L`;
+  } else if(acid&&h3l){dist='Acidose metabólica';cls='danger';
+    const w1=(1.3*hco3+8).toFixed(1),w2=(1.5*hco3+8).toFixed(1);
+    bd+=`pH ${ph} · HCO₃⁻ ${hco3} mEq/L<br>PaCO₂ esperado (Winter): <strong>${w1}–${w2} mmHg</strong>`;
+    if(!isNaN(pco2)){if(pco2<parseFloat(w1)-2||pco2>parseFloat(w2)+2) bd+='<br><span class="badge b-amber">Distúrbio misto — compensação fora do esperado</span>';}
+  } else if(alc&&co2l){dist='Alcalose respiratória';cls='info';
+    const a=(24-(0.2*(40-pco2))).toFixed(1),c=(24-(0.5*(40-pco2))).toFixed(1);
+    bd+=`pH ${ph} · PaCO₂ ${pco2} mmHg<br>Compensação esperada: <strong>aguda</strong> HCO₃⁻ ≈ ${a} | <strong>crônica</strong> ≈ ${c} mEq/L`;
+  } else if(alc&&h3h){dist='Alcalose metabólica';cls='info';
+    const p=(0.7*(hco3-24)+40).toFixed(1);
+    bd+=`pH ${ph} · HCO₃⁻ ${hco3} mEq/L<br>PaCO₂ esperado: <strong>≈ ${p} mmHg</strong>`;
+  } else if(!acid&&!alc&&(co2h||co2l||h3h||h3l)){dist='Distúrbio misto — pH compensado';cls='warn';
+    bd+='pH normal não exclui distúrbio. Avaliar compensação e contexto clínico.';
+  } else {dist='Gasometria dentro dos limites';cls='success';bd='Todos os parâmetros estão na faixa de referência.';}
+  if(!isNaN(be)) bd+=`<br>BE ${be} mEq/L → ${be<-2?'déficit de base':be>2?'excesso de base':'normal'}`;
+  setRes('gas',cls,dist,bd);
+}
+function calcAG(){
+  const na=parseFloat(document.getElementById('ag-na').value);
+  const cl=parseFloat(document.getElementById('ag-cl').value);
+  const hco3=parseFloat(document.getElementById('ag-hco3').value);
+  const alb=parseFloat(document.getElementById('ag-alb').value)||4;
+  if(isNaN(na)||isNaN(cl)||isNaN(hco3)){alert('Preencha Na⁺, Cl⁻ e HCO₃⁻');return;}
+  const ag=na-cl-hco3;
+  const agc=ag+2.5*(4-alb);
+  const dag=agc-10;const dhco3=24-hco3;
+  const cls=agc>12?'danger':agc<8?'warn':'success';
+  const lbl=agc>12?'AG aumentado':'AG normal';
+  setRes('ag',cls,`${lbl} — AG = ${ag.toFixed(1)} | AG corrigido = ${agc.toFixed(1)} mEq/L`,
+    agc>12?`Presença de ácidos não medidos.<br>Causas: láctico, cetoacidose, uremia, intoxicações.`:
+    agc<8?`AG reduzido — investigar hipoalbuminemia ou paraproteínas.`:
+    `Acidose hiperclorêmica ou sem distúrbio de AG.`);
+  if(dhco3>0){
+    const r=dag/dhco3;
+    let ri,rcls='b-gray';
+    if(r>=0.8&&r<=1.2){ri='Normal — AG aumentado isolado';rcls='b-green';}
+    else if(r<0.8){ri='Coexiste acidose hiperclorêmica';rcls='b-amber';}
+    else if(r<=2){ri='+ alcalose metabólica associada';rcls='b-blue';}
+    else{ri='Possível alcalose láctica / erro';rcls='b-red';}
+    document.getElementById('res-delta').innerHTML=
+      `ΔAG = ${dag.toFixed(1)} · ΔHCO₃⁻ = ${dhco3.toFixed(1)} · Razão = <strong>${r.toFixed(2)}</strong><br><span class="badge ${rcls}" style="margin-top:4px">${ri}</span>`;
+  }
+  const hco3c=hco3+dag;
+  document.getElementById('res-hco3c').innerHTML=
+    `HCO₃⁻ corrigido = <strong>${hco3c.toFixed(1)} mEq/L</strong> — `+
+    (hco3c>=22&&hco3c<=26?'<span class="badge b-green">normal — AG isolado</span>':
+    hco3c<22?'<span class="badge b-red">AG + acidose hiperclorêmica</span>':
+    '<span class="badge b-blue">+ alcalose metabólica</span>');
+}
+function calcKDIGO(){
+  const b=parseFloat(document.getElementById('cr-b').value);
+  const a=parseFloat(document.getElementById('cr-a').value);
+  const d=parseFloat(document.getElementById('cr-d').value);
+  if(isNaN(b)||isNaN(a)){alert('Preencha creatinina basal e atual');return;}
+  const r=a/b,delta=a-b;
+  let st=0,cls='success';
+  if(r>=3||a>=4){st=3;cls='danger';}
+  else if(r>=2){st=2;cls='warn';}
+  else if(r>=1.5||delta>=0.3){st=1;cls='info';}
+  else if(!isNaN(d)&&d<0.5){st=1;cls='info';}
+  const lbls=['Sem critério para AKI','AKI estágio 1 — leve','AKI estágio 2 — moderado','AKI estágio 3 — grave'];
+  const bd=`Razão creatinina: <strong>${r.toFixed(2)}×</strong> · Delta: <strong>${delta.toFixed(2)} mg/dL</strong><br>${
+    st===0?'Sem critério KDIGO pelos valores fornecidos.':
+    st===1?'Monitorizar creatinina, eletrólitos e diurese.':
+    st===2?'Otimizar perfusão, volume e K⁺. Reavaliar diurese.':
+    'Avaliar TRS precoce. Aplicar critérios AEIOU.'}`;
+  setRes('kdigo',cls,lbls[st],bd);
+}
+function calcAlc(){
+  const ph=parseFloat(document.getElementById('al-ph').value);
+  const hco3=parseFloat(document.getElementById('al-hco3').value);
+  const clur=parseFloat(document.getElementById('al-clur').value);
+  if(isNaN(ph)||isNaN(hco3)){alert('Preencha pH e HCO₃⁻');return;}
+  if(ph<7.45||hco3<28){setRes('alc','neutral','Parâmetros não confirmam alcalose metabólica','pH < 7,45 ou HCO₃⁻ < 28 — revisar gasometria.');return;}
+  const sev=ph>7.55?'Grave (pH > 7,55) — tratar ativamente!':ph>7.50?'Moderada (pH 7,51–7,55)':'Leve (pH 7,45–7,50)';
+  let cond='';
+  if(!isNaN(clur)){
+    if(clur<20) cond='<strong>Cloro responsivo</strong> (Cl⁻ur &lt; 20 mEq/L)<br>Repor volume (SF 0,9%) · repor cloreto · corrigir K⁺ · suspender causa precipitante';
+    else if(clur>=25) cond='<strong>Cloro resistente</strong> (Cl⁻ur ≥ 25 mEq/L)<br>Suspender diuréticos · acetazolamida · espironolactona se hiperaldosteronismo · corrigir K⁺';
+    else cond='<strong>Zona cinza</strong> (Cl⁻ur 20–25 mEq/L)<br>Avaliar contexto clínico e resposta terapêutica';
+  }
+  setRes('alc','info',`Alcalose metabólica — ${sev}`,cond||'Informe o Cl⁻ urinário para orientar a conduta.');
+}
+function calcBic(){
+  const kg=parseFloat(document.getElementById('b-kg').value);
+  const hm=parseFloat(document.getElementById('b-hm').value);
+  const hd=parseFloat(document.getElementById('b-hd').value);
+  const be=parseFloat(document.getElementById('b-be').value);
+  const pct=parseFloat(document.getElementById('b-pct').value);
+  if(isNaN(kg)){alert('Preencha o peso');return;}
+  let lines=[];
+  if(!isNaN(hm)&&!isNaN(hd)){
+    const def=0.4*kg*(hd-hm);
+    const dose=def*pct;
+    lines.push(`Fórmula HCO₃⁻: 0,4 × ${kg} × (${hd}−${hm}) = <strong>${def.toFixed(1)} mEq</strong>`);
+    lines.push(`Dose (${(pct*100).toFixed(0)}%): <strong>${dose.toFixed(1)} mEq</strong>`);
+    lines.push(`Volume: BIC 4,2% = <strong>${(dose/0.5).toFixed(1)} mL</strong> · BIC 8,4% = <strong>${dose.toFixed(1)} mL</strong>`);
+  }
+  if(!isNaN(be)&&be<0){
+    const d1=(0.3*kg*Math.abs(be)).toFixed(1);
+    const d2=(0.4*kg*Math.abs(be)).toFixed(1);
+    const dose1=(0.3*kg*Math.abs(be)*pct).toFixed(1);
+    const dose2=(0.4*kg*Math.abs(be)*pct).toFixed(1);
+    lines.push(`Fórmula BE: 0,3–0,4 × ${kg} × |${be}| = <strong>${d1}–${d2} mEq</strong>`);
+    lines.push(`Dose (${(pct*100).toFixed(0)}%): <strong>${dose1}–${dose2} mEq</strong>`);
+  }
+  if(!lines.length){alert('Preencha HCO₃ medido/desejado ou BE');return;}
+  lines.push(`<br><span style="font-size:11px;opacity:.8">Infundir 50% em 30–60 min · Reavaliar gasometria antes de completar a dose.</span>`);
+  setRes('bic','info','Cálculo de dose — bicarbonato de sódio',lines.join('<br>'));
+}
+</script>
+</body>
+</html>
