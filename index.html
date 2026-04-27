@@ -176,6 +176,90 @@ body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-p
 /* ── Accent border on cards ───────────────────────── */
 .card-danger{border-top:3px solid var(--danger-accent)!important}
 .card-info{border-top:3px solid var(--info-accent)!important}
+
+/* ── Tabela com scroll horizontal em telas pequenas ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius-md)}
+
+/* ══ TABLET (≤ 768px) ════════════════════════════════ */
+@media(max-width:768px){
+  .app{padding:16px 14px 40px}
+  .topbar{flex-wrap:wrap;gap:10px}
+  .topbar-badge{font-size:10px;padding:3px 8px}
+  .nav-btn{padding:7px 12px;font-size:12px}
+  .g2{grid-template-columns:1fr}
+  .ref-grid{grid-template-columns:repeat(3,1fr)}
+  .card{padding:14px}
+  .row label{width:80px}
+  .row .unit{width:50px;font-size:10px}
+  .step-body{padding:0 12px 12px 38px}
+  .tbl th,.tbl td{padding:6px 8px;font-size:11px}
+}
+
+/* ══ MOBILE (≤ 480px) ════════════════════════════════ */
+@media(max-width:480px){
+  .app{padding:12px 10px 32px}
+
+  /* Topbar */
+  .topbar{flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:14px}
+  .topbar-badge{display:none}
+  .topbar-title{font-size:14px}
+  .topbar-sub{font-size:11px}
+
+  /* Nav */
+  .nav-wrap{padding:3px;gap:1px;border-radius:var(--radius-md);margin-bottom:14px}
+  .nav-btn{padding:7px 10px;font-size:11px;gap:4px}
+  .nav-btn .dot{width:5px;height:5px}
+
+  /* Cards */
+  .card{padding:12px;border-radius:var(--radius-md)}
+  .card+.card,.card+.mcard,.mcard+.card{margin-top:10px}
+  .mcard{padding:10px}
+
+  /* Inputs - toque mais fácil */
+  .row{flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .row label{width:100%;font-size:12px;margin-bottom:0}
+  .row input,.row select{height:40px;font-size:14px}
+  .row .unit{width:auto;text-align:left;font-size:10px;order:3}
+
+  /* Botão */
+  .btn-calc{padding:12px;font-size:13px;min-height:44px}
+
+  /* Referências */
+  .ref-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .ref-val{font-size:12px}
+
+  /* Resultados */
+  .result-head{font-size:12px;padding:9px 12px}
+  .result-body{font-size:11px;padding:10px 12px;line-height:1.65}
+
+  /* Accordion */
+  .step-hd{padding:9px 10px;gap:8px}
+  .step-num{width:22px;height:22px;font-size:10px}
+  .step-label{font-size:12px}
+  .step-body{padding:0 10px 10px 34px;font-size:11px}
+
+  /* Tabelas com scroll */
+  .tbl-wrap{margin:0 -10px;padding:0 10px}
+  .tbl{font-size:11px;min-width:360px}
+  .tbl th,.tbl td{padding:6px 7px;font-size:10px}
+
+  /* Alertas */
+  .alert{font-size:11px;padding:9px 10px}
+
+  /* Fórmula */
+  .formula{font-size:10px;padding:8px 10px}
+
+  /* Info rows */
+  .info-row{font-size:11px;flex-direction:column;gap:2px;align-items:flex-start}
+  .info-row span:last-child{font-size:12px}
+
+  /* Tags */
+  .tags{gap:4px}
+  .badge{font-size:9px;padding:2px 6px}
+
+  /* Seção */
+  .section{font-size:9px}
+}
 </style>
 </head>
 <body>
@@ -343,12 +427,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-p
       </div>
       <div class="card" style="margin-top:12px">
         <div class="section">tabela KDIGO</div>
-        <table class="tbl">
+        <div class="tbl-wrap"><table class="tbl">
           <tr><th>Estágio</th><th>Creatinina</th><th>Diurese</th></tr>
           <tr><td class="s1">1 Leve</td><td>1,5–1,9× ou ≥0,3 mg/dL</td><td>&lt;0,5 mL/kg/h 6–12h</td></tr>
           <tr><td class="s2">2 Moderado</td><td>2,0–2,9×</td><td>&lt;0,5 mL/kg/h ≥12h</td></tr>
           <tr><td class="s3">3 Grave</td><td>≥3× ou ≥4,0 mg/dL</td><td>&lt;0,3 mL/kg/h ≥24h</td></tr>
-        </table>
+        </table></div>
       </div>
     </div>
     <div>
@@ -402,12 +486,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-p
     <div>
       <div class="card">
         <div class="section">gravidade pelo pH</div>
-        <table class="tbl" style="margin-bottom:14px">
+        <div class="tbl-wrap"><table class="tbl" style="margin-bottom:14px">
           <tr><th>Grau</th><th>pH</th><th>HCO₃⁻</th><th>Clínica</th></tr>
           <tr><td class="s1">Leve</td><td>7,45–7,50</td><td>28–32</td><td>Assintomática</td></tr>
           <tr><td class="s2">Moderada</td><td>7,51–7,55</td><td>32–36</td><td>Leve</td></tr>
           <tr><td class="s3">Grave</td><td>&gt; 7,55</td><td>&gt; 36</td><td>Importante</td></tr>
-        </table>
+        </table></div>
         <div class="divider"></div>
         <div class="section">causas por grupo</div>
         <div style="font-size:12px;color:var(--text-secondary);line-height:2">
@@ -455,12 +539,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-p
     <div>
       <div class="card">
         <div class="section">classificação da acidose</div>
-        <table class="tbl" style="margin-bottom:12px">
+        <div class="tbl-wrap"><table class="tbl" style="margin-bottom:12px">
           <tr><th></th><th class="th-green">Leve</th><th class="th-amber">Moderada</th><th class="th-red">Grave</th></tr>
           <tr><td style="color:var(--text-secondary);font-weight:500">pH</td><td>7,20–7,30</td><td>7,10–7,20</td><td>&lt; 7,10</td></tr>
           <tr><td style="color:var(--text-secondary);font-weight:500">BE</td><td>-6 a -10</td><td>-10 a -16</td><td>≤ -16</td></tr>
           <tr><td style="color:var(--text-secondary);font-weight:500">HCO₃⁻</td><td>16–18</td><td>10–15</td><td>&lt; 10</td></tr>
-        </table>
+        </table></div>
         <div class="divider"></div>
         <div class="section">concentrações disponíveis</div>
         <div class="info-row"><span>8,4% (uso comum)</span><span>1 mEq/mL</span></div>
