@@ -191,6 +191,7 @@
         <div class="row"><label>Creat. basal</label><input type="number" id="cr-b" step="0.01" placeholder="0.50"/><span class="unit">mg/dL</span></div>
         <div class="row"><label>Creat. atual</label><input type="number" id="cr-a" step="0.01" placeholder="0.90"/><span class="unit">mg/dL</span></div>
         <div class="row"><label>Diurese</label><input type="number" id="cr-d" step="0.01" placeholder="0.4"/><span class="unit">mL/kg/h</span></div>
+        <div class="row"><label>Tempo oligúria</label><input type="number" id="cr-dt" step="1" placeholder="8"/><span class="unit">horas</span></div>
         <button class="btn-calc primary" onclick="calcKDIGO()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           Estadiar AKI
@@ -289,11 +290,17 @@
     <div>
       <div class="card">
         <div class="section">calculadora de dose</div>
-        <div class="formula">Déficit = 0,4 × Peso × (HCO₃ desejado − medido)<br>ou = 0,3–0,4 × Peso × |BE|</div>
+        <div class="formula">Déficit = Vd × Peso × (HCO₃ desejado − medido)<br>ou = Vd × Peso × |BE|</div>
         <div class="row"><label>Peso (kg)</label><input type="number" id="b-kg" step="0.1" placeholder="15"/></div>
         <div class="row"><label>HCO₃ medido</label><input type="number" id="b-hm" step="0.5" placeholder="12"/><span class="unit">mEq/L</span></div>
         <div class="row"><label>HCO₃ desejado</label><input type="number" id="b-hd" step="0.5" placeholder="15"/><span class="unit">mEq/L</span></div>
         <div class="row"><label>BE</label><input type="number" id="b-be" step="0.5" placeholder="-12"/><span class="unit">mEq/L</span></div>
+        <div class="row"><label>Fator Vd</label>
+          <select id="b-vd">
+            <option value="0.3">0,3 — pediátrico (conservador)</option>
+            <option value="0.4">0,4 — padrão (adulto)</option>
+          </select>
+        </div>
         <div class="row"><label>% a corrigir</label>
           <select id="b-pct">
             <option value="0.5">50% — inicial</option>

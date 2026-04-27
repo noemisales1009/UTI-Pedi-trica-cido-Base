@@ -1,3 +1,5 @@
+export {}
+
 type ResultClass = 'danger' | 'info' | 'success' | 'warn' | 'neutral'
 
 function val(id: string): number {
@@ -24,6 +26,7 @@ function tog(el: HTMLElement): void {
   if (!was) el.classList.add('open')
 }
 
+// ── FIX 1: detecção de distúrbios mistos ──────────────
 function calcGas(): void {
   const ph = val('g-ph'), pco2 = val('g-pco2'), hco3 = val('g-hco3'), be = val('g-be')
   if (isNaN(ph) || isNaN(pco2) || isNaN(hco3)) { alert('Preencha pH, PaCO₂ e HCO₃⁻'); return }
@@ -33,32 +36,63 @@ function calcGas(): void {
   const h3h = hco3 > 26, h3l = hco3 < 22
 
   let dist = '', cls: ResultClass = 'success', bd = ''
-
   if (ph < 7.10 || ph > 7.60) bd = '<span class="badge b-red">pH fatal — risco elevado de morte</span><br><br>'
 
-  if (acid && co2h) {
+  // Distúrbios mistos detectados ANTES dos simples
+  if (co2h && h3l) {
+    // Ambos puxam para acidose — nunca é compensação, é distúrbio misto real
+    dist = 'Distúrbio misto — acidose respiratória + metabólica'; cls = 'danger'
+    bd += `PaCO₂ ${pco2} mmHg (↑) e HCO₃⁻ ${hco3} mEq/L (↓) — ambos contribuem para acidemia.<br>`
+    bd += '<span class="badge b-red">Atenção: distúrbio misto grave</span>'
+
+  } else if (co2l && h3h) {
+    // Ambos puxam para alcalose
+    dist = 'Distúrbio misto — alcalose respiratória + metabólica'; cls = 'warn'
+    bd += `PaCO₂ ${pco2} mmHg (↓) e HCO₃⁻ ${hco3} mEq/L (↑) — ambos contribuem para alcalemia.`
+
+  } else if (!acid && !alc && co2h && h3h) {
+    // Opostos: acidose resp + alcalose metab → pH normal
+    dist = 'Distúrbio misto — acidose resp. + alcalose metab. (pH compensado)'; cls = 'warn'
+    bd += 'pH normal mascara dois distúrbios opostos. Avaliar contexto clínico (ex: DPOC + vômitos).'
+
+  } else if (!acid && !alc && co2l && h3l) {
+    // Opostos: alcalose resp + acidose metab → pH normal
+    dist = 'Distúrbio misto — alcalose resp. + acidose metab. (pH compensado)'; cls = 'warn'
+    bd += 'pH normal mascara dois distúrbios opostos. Avaliar contexto clínico (ex: sepse + diarreia).'
+
+  } else if (acid && co2h) {
     dist = 'Acidose respiratória'; cls = 'danger'
-    const a = (24 + 0.15 * (pco2 - 40)).toFixed(1)
-    const c = (24 + 0.35 * (pco2 - 40)).toFixed(1)
-    bd += `pH ${ph} · PaCO₂ ${pco2} mmHg · HCO₃⁻ ${hco3} mEq/L<br>Compensação esperada: <strong>aguda</strong> HCO₃⁻ ≈ ${a} | <strong>crônica</strong> ≈ ${c} mEq/L`
+    const aExp = (24 + 0.15 * (pco2 - 40)).toFixed(1)
+    const cExp = (24 + 0.35 * (pco2 - 40)).toFixed(1)
+    bd += `pH ${ph} · PaCO₂ ${pco2} mmHg · HCO₃⁻ ${hco3} mEq/L<br>`
+    bd += `Compensação esperada: <strong>aguda</strong> HCO₃⁻ ≈ ${aExp} | <strong>crônica</strong> ≈ ${cExp} mEq/L`
+    if (hco3 < parseFloat(aExp) - 2)
+      bd += '<br><span class="badge b-amber">HCO₃⁻ abaixo do esperado — investigar acidose metabólica associada</span>'
+
   } else if (acid && h3l) {
     dist = 'Acidose metabólica'; cls = 'danger'
     const w1 = (1.3 * hco3 + 8).toFixed(1), w2 = (1.5 * hco3 + 8).toFixed(1)
     bd += `pH ${ph} · HCO₃⁻ ${hco3} mEq/L<br>PaCO₂ esperado (Winter): <strong>${w1}–${w2} mmHg</strong>`
     if (!isNaN(pco2) && (pco2 < parseFloat(w1) - 2 || pco2 > parseFloat(w2) + 2))
-      bd += '<br><span class="badge b-amber">Distúrbio misto — compensação fora do esperado</span>'
+      bd += '<br><span class="badge b-amber">Distúrbio misto — compensação respiratória fora do esperado</span>'
+
   } else if (alc && co2l) {
     dist = 'Alcalose respiratória'; cls = 'info'
-    const a = (24 - 0.2 * (40 - pco2)).toFixed(1)
-    const c = (24 - 0.5 * (40 - pco2)).toFixed(1)
-    bd += `pH ${ph} · PaCO₂ ${pco2} mmHg<br>Compensação esperada: <strong>aguda</strong> HCO₃⁻ ≈ ${a} | <strong>crônica</strong> ≈ ${c} mEq/L`
+    const aExp = (24 - 0.2 * (40 - pco2)).toFixed(1)
+    const cExp = (24 - 0.5 * (40 - pco2)).toFixed(1)
+    bd += `pH ${ph} · PaCO₂ ${pco2} mmHg<br>Compensação esperada: <strong>aguda</strong> HCO₃⁻ ≈ ${aExp} | <strong>crônica</strong> ≈ ${cExp} mEq/L`
+
   } else if (alc && h3h) {
     dist = 'Alcalose metabólica'; cls = 'info'
-    const p = (0.7 * (hco3 - 24) + 40).toFixed(1)
-    bd += `pH ${ph} · HCO₃⁻ ${hco3} mEq/L<br>PaCO₂ esperado: <strong>≈ ${p} mmHg</strong>`
+    // FIX 2: range 0,6–0,7 × (HCO₃⁻ − 24) + 40
+    const p1 = (0.6 * (hco3 - 24) + 40).toFixed(1)
+    const p2 = (0.7 * (hco3 - 24) + 40).toFixed(1)
+    bd += `pH ${ph} · HCO₃⁻ ${hco3} mEq/L<br>PaCO₂ esperado: <strong>${p1}–${p2} mmHg</strong>`
+
   } else if (!acid && !alc && (co2h || co2l || h3h || h3l)) {
     dist = 'Distúrbio misto — pH compensado'; cls = 'warn'
-    bd += 'pH normal não exclui distúrbio. Avaliar compensação e contexto clínico.'
+    bd += 'pH normal com parâmetros alterados. Avaliar compensação e contexto clínico.'
+
   } else {
     dist = 'Gasometria dentro dos limites'; cls = 'success'
     bd = 'Todos os parâmetros estão na faixa de referência.'
@@ -90,10 +124,10 @@ function calcAG(): void {
   if (dhco3 > 0) {
     const r = dag / dhco3
     let ri = '', rcls = 'b-gray'
-    if (r >= 0.8 && r <= 1.2)   { ri = 'Normal — AG aumentado isolado';     rcls = 'b-green' }
-    else if (r < 0.8)            { ri = 'Coexiste acidose hiperclorêmica';    rcls = 'b-amber' }
-    else if (r <= 2)             { ri = '+ alcalose metabólica associada';    rcls = 'b-blue'  }
-    else                         { ri = 'Possível alcalose láctica / erro';   rcls = 'b-red'   }
+    if (r >= 0.8 && r <= 1.2)   { ri = 'Normal — AG aumentado isolado';   rcls = 'b-green' }
+    else if (r < 0.8)            { ri = 'Coexiste acidose hiperclorêmica'; rcls = 'b-amber' }
+    else if (r <= 2)             { ri = '+ alcalose metabólica associada'; rcls = 'b-blue'  }
+    else                         { ri = 'Possível alcalose láctica / erro';rcls = 'b-red'   }
     ;(document.getElementById('res-delta') as HTMLElement).innerHTML =
       `ΔAG = ${dag.toFixed(1)} · ΔHCO₃⁻ = ${dhco3.toFixed(1)} · Razão = <strong>${r.toFixed(2)}</strong><br><span class="badge ${rcls}" style="margin-top:4px">${ri}</span>`
   }
@@ -107,23 +141,51 @@ function calcAG(): void {
     )
 }
 
+// ── FIX 3: diurese distingue estágios 1, 2 e 3 ───────
 function calcKDIGO(): void {
-  const b = val('cr-b'), a = val('cr-a'), d = val('cr-d')
+  const b = val('cr-b'), a = val('cr-a'), d = val('cr-d'), dt = val('cr-dt')
   if (isNaN(b) || isNaN(a)) { alert('Preencha creatinina basal e atual'); return }
 
   const r = a / b, delta = a - b
-  let st = 0; let cls: ResultClass = 'success'
-  if (r >= 3 || a >= 4)          { st = 3; cls = 'danger' }
-  else if (r >= 2)               { st = 2; cls = 'warn'   }
-  else if (r >= 1.5 || delta >= 0.3) { st = 1; cls = 'info' }
-  else if (!isNaN(d) && d < 0.5) { st = 1; cls = 'info'  }
+  let stCr = 0     // estágio pela creatinina
+  let stDi = 0     // estágio pela diurese
+  let cls: ResultClass = 'success'
+
+  // Estágio por creatinina
+  if (r >= 3 || a >= 4)          stCr = 3
+  else if (r >= 2)               stCr = 2
+  else if (r >= 1.5 || delta >= 0.3) stCr = 1
+
+  // Estágio por diurese (com janela temporal)
+  if (!isNaN(d) && !isNaN(dt) && dt > 0) {
+    if (d < 0.3 && dt >= 24)     stDi = 3
+    else if (d < 0.5 && dt >= 12) stDi = 2
+    else if (d < 0.5 && dt >= 6)  stDi = 1
+  } else if (!isNaN(d) && d < 0.5) {
+    stDi = 1  // sem tempo: mínimo estágio 1
+  }
+
+  const st = Math.max(stCr, stDi)
+  if (st === 3) cls = 'danger'
+  else if (st === 2) cls = 'warn'
+  else if (st === 1) cls = 'info'
 
   const lbls = ['Sem critério para AKI', 'AKI estágio 1 — leve', 'AKI estágio 2 — moderado', 'AKI estágio 3 — grave']
-  const bd = `Razão creatinina: <strong>${r.toFixed(2)}×</strong> · Delta: <strong>${delta.toFixed(2)} mg/dL</strong><br>${
+
+  let bd = `Razão creatinina: <strong>${r.toFixed(2)}×</strong> · Delta: <strong>${delta.toFixed(2)} mg/dL</strong>`
+  if (!isNaN(d)) {
+    bd += ` · Diurese: <strong>${d} mL/kg/h</strong>`
+    if (!isNaN(dt) && dt > 0) bd += ` por <strong>${dt}h</strong>`
+  }
+  if (stCr > 0 && stDi > 0 && stCr !== stDi)
+    bd += `<br><span class="badge b-amber">Creatinina → estágio ${stCr} · Diurese → estágio ${stDi} · Prevalece o maior</span>`
+
+  bd += '<br>' + (
     st === 0 ? 'Sem critério KDIGO pelos valores fornecidos.'
-    : st === 1 ? 'Monitorizar creatinina, eletrólitos e diurese.'
-    : st === 2 ? 'Otimizar perfusão, volume e K⁺. Reavaliar diurese.'
-    : 'Avaliar TRS precoce. Aplicar critérios AEIOU.'}`
+    : st === 1 ? 'Monitorizar creatinina, eletrólitos e diurese de perto.'
+    : st === 2 ? 'Otimizar perfusão renal, volume e K⁺. Reavaliar diurese.'
+    : 'Avaliar TRS precoce. Aplicar critérios AEIOU.'
+  )
   setRes('kdigo', cls, lbls[st], bd)
 }
 
@@ -150,31 +212,33 @@ function calcAlc(): void {
   setRes('alc', 'info', `Alcalose metabólica — ${sev}`, cond || 'Informe o Cl⁻ urinário para orientar a conduta.')
 }
 
+// ── FIX 4: fator Vd pediátrico vs adulto ──────────────
 function calcBic(): void {
   const kg = val('b-kg'), hm = val('b-hm'), hd = val('b-hd'), be = val('b-be')
   const pct = val('b-pct')
+  const vd = val('b-vd')   // 0.3 pediátrico / 0.4 adulto
   if (isNaN(kg)) { alert('Preencha o peso'); return }
 
   const lines: string[] = []
   if (!isNaN(hm) && !isNaN(hd)) {
-    const def = 0.4 * kg * (hd - hm)
+    const def = vd * kg * (hd - hm)
     const dose = def * pct
-    lines.push(`Fórmula HCO₃⁻: 0,4 × ${kg} × (${hd}−${hm}) = <strong>${def.toFixed(1)} mEq</strong>`)
+    lines.push(`Fórmula HCO₃⁻: ${vd} × ${kg} × (${hd}−${hm}) = <strong>${def.toFixed(1)} mEq</strong>`)
     lines.push(`Dose (${(pct * 100).toFixed(0)}%): <strong>${dose.toFixed(1)} mEq</strong>`)
     lines.push(`Volume: BIC 4,2% = <strong>${(dose / 0.5).toFixed(1)} mL</strong> · BIC 8,4% = <strong>${dose.toFixed(1)} mL</strong>`)
   }
   if (!isNaN(be) && be < 0) {
-    const d1 = (0.3 * kg * Math.abs(be)).toFixed(1)
-    const d2 = (0.4 * kg * Math.abs(be)).toFixed(1)
-    lines.push(`Fórmula BE: 0,3–0,4 × ${kg} × |${be}| = <strong>${d1}–${d2} mEq</strong>`)
-    lines.push(`Dose (${(pct * 100).toFixed(0)}%): <strong>${(0.3 * kg * Math.abs(be) * pct).toFixed(1)}–${(0.4 * kg * Math.abs(be) * pct).toFixed(1)} mEq</strong>`)
+    const d1 = (vd * kg * Math.abs(be)).toFixed(1)
+    const dose1 = (vd * kg * Math.abs(be) * pct).toFixed(1)
+    lines.push(`Fórmula BE: ${vd} × ${kg} × |${be}| = <strong>${d1} mEq</strong>`)
+    lines.push(`Dose (${(pct * 100).toFixed(0)}%): <strong>${dose1} mEq</strong>`)
   }
   if (!lines.length) { alert('Preencha HCO₃ medido/desejado ou BE'); return }
   lines.push('<br><span style="font-size:11px;opacity:.8">Infundir 50% em 30–60 min · Reavaliar gasometria antes de completar a dose.</span>')
   setRes('bic', 'info', 'Cálculo de dose — bicarbonato de sódio', lines.join('<br>'))
 }
 
-// Expõe funções ao escopo global (necessário para onclick inline no HTML)
+// Expõe funções ao escopo global (onclick inline no HTML)
 declare global {
   interface Window {
     nav: typeof nav
